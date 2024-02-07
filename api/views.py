@@ -7,15 +7,33 @@ from .serializer import (
     AuthorModelSerializer,
 )
 from books.models import ReviewBookModel, BooksModel, AuthorModel
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+
+
 
 # Create your views here.
 
 
-class BooksAPIView(APIView):
-    def get(self, reques):
-        books = BooksModel.objects.all()
-        serializer = BooksModelSerializer(books, many=True)
-        return Response(data=serializer.data)
+# class BooksAPIView(APIView):
+#     def get(self, reques):
+#         books = BooksModel.objects.all()
+#         serializer = BooksModelSerializer(books, many=True)
+#         return Response(data=serializer.data)
+
+
+# class BooksAPIView(generics.ListCreateAPIView):
+#     queryset = BooksModel.objects.all()
+#     serializer_class = BooksModelSerializer
+#     permission_classes = [IsAuthenticated]
+
+class BooksAPIView(viewsets.ModelViewSet):
+    serializer_class = BooksModelSerializer
+    queryset = BooksModel.objects.all()
+    permission_classes = [IsAuthenticated]
+
 
 
 class AuthorAPIView(APIView):
